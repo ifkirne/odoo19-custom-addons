@@ -1,0 +1,60 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+<!--
+    <record model="ir.ui.view" id="health_pharma.list">
+      <field name="name">health_pharma list</field>
+      <field name="model">health_pharma.health_pharma</field>
+      <field name="arch" type="xml">
+        <list>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </list>
+      </field>
+    </record>
+-->
+
+    <!-- actions opening views on models -->
+<!--
+    <record model="ir.actions.act_window" id="health_pharma.action_window">
+      <field name="name">health_pharma window</field>
+      <field name="res_model">health_pharma.health_pharma</field>
+      <field name="view_mode">list,form</field>
+    </record>
+-->
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="health_pharma.action_server">
+      <field name="name">health_pharma server</field>
+      <field name="model_id" ref="model_health_pharma_health_pharma"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "list,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+<!--
+    <menuitem name="health_pharma" id="health_pharma.menu_root"/>
+-->
+    <!-- menu categories -->
+<!--
+    <menuitem name="Menu 1" id="health_pharma.menu_1" parent="health_pharma.menu_root"/>
+    <menuitem name="Menu 2" id="health_pharma.menu_2" parent="health_pharma.menu_root"/>
+-->
+    <!-- actions -->
+<!--
+    <menuitem name="List" id="health_pharma.menu_1_list" parent="health_pharma.menu_1"
+              action="health_pharma.action_window"/>
+    <menuitem name="Server to list" id="health_pharma" parent="health_pharma.menu_2"
+              action="health_pharma.action_server"/>
+-->
+  </data>
+</odoo>
