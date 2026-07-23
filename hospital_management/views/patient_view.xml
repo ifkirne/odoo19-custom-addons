@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- list/tree view -->
+    <record id="view_hospital_patient_list" model="ir.ui.view">
+        <field name="name">hospital.patient.list</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <!-- TASK 5: Apply Decorations to improve readability -->
+            <list decoration-success="state == 'discharged'"
+                  decoration-info="state == 'admitted'"
+                  decoration-danger="state == 'cancel'"
+                  decoration-warning="state == 'treatment'">
+                <field name="name" string="Patient Full Name"/>
+                <field name="age"/>
+                <field name="admission_date"/>
+                <field name="gender"/>
+                <field name="ref" string="reference"/>
+                <field name="doctor_id" string="Doctor"/>
+                <!-- Added state with badge widget to make decorations make sense visually -->
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form view -->
+    <record id="view_hospital_patient_form" model="ir.ui.view">
+        <field name="name">hospital.patient.form</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <form>
+
+                <header>
+                    <!-- 1. The Discharge Wizard Button (Fixes your wizard issue) -->
+                    <!-- It uses context to pass the current patient's 'id' to the wizard automatically -->
+                    <button name="%(hospital_management.action_patient_Discharge_Wizard)d"
+                            string="Discharge"
+                            type="action"
+                            class="oe_highlight"
+                            context="{'default_patient_id': id}"/>
+
+                    <!-- 2. Your Existing Action Buttons -->
+                    <button name="action_dynamic_update"
+                            string="Admit Patient"
+                            type="object"
+                            class="oe_highlight"/>
+
+                    <button name="action_dynamic_create_copy"
+                            string="Duplicate Patient"
+                            type="object"/>
+
+                    <button name="action_dynamic_delete"
+                            string="Delete Patient"
+                            type="object"
+                            class="btn-danger"
+                            confirm="Are you sure you want to delete this patient?"/>
+
+                    <!-- 3. Your Existing Print Button -->
+                    <button name="%(hospital_management.action_patient_report)d"
+                            string="Print"
+                            type="action"
+                            class="oe_highlight"
+                            context="{'default_patient_id': id}"/>
+
+                    <!-- 4. The Clickable Statusbar -->
+                    <!-- options="{'clickable': '1'}" allows the user to click stages directly -->
+                    <field name="state"
+                           widget="statusbar"
+                           statusbar_visible="draft,admitted,treatment,discharged"
+                           options="{'clickable': '1'}"/>
+                </header>
+
+                <sheet>
+                    <!-- TASK 7: Smart Buttons (Must go at the top of the sheet in an oe_button_box div) -->
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_patient_appointments" type="object" class="oe_stat_button"
+                                icon="fa-calendar">
+                            <field name="appointment_count" widget="stateinfo" string="Appointments"/>
+                        </button>
+                    </div>
+
+                    <!-- TASK 3: Image Widget -->
+                    <field name="image" widget="image" class="oe_avatar"/>
+
+                    <!-- TASK 1: Professional Title Layout -->
+                    <div class="oe_title">
+                        <h1>
+                            <!-- TASK 6: Conditional Attributes - name is required -->
+                            <field name="name" placeholder="e.g. John Doe" required="1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <!-- TASK 3: Phone and Email Widgets -->
+                            <field name="phone" widget="phone"/>
+                            <field name="email" widget="email"/>
+                            <field name="date_of_birth"/>
+                            <!-- TASK 6: Conditional attribute - age is readonly if they are not in draft state -->
+                            <field name="age" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <!-- TASK 3: Priority Widget -->
+                            <field name="priority" widget="priority"/>
+                            <field name="ref"/>
+                            <field name="gender"/>
+                            <field name="is_admitted"/>
+                        </group>
+                    </group>
+
+                    <!-- TASK 2: Organize Information Using Notebook Pages -->
+                    <notebook>
+                        <page string="Admission Details" name="admission_info">
+                            <group>
+                                <field name="admission_date"/>
+                                <field name="doctor_id" string="Doctor"/>
+                            </group>
+                        </page>
+                        <page string="Medical Information" name="medical_info">
+                            <group>
+                                <field name="weight"/>
+                                <field name="medical_history"/>
+                            </group>
+                        </page>
+                        <!-- TASK 6: Conditional Attribute - This entire tab hides unless the patient is admitted or beyond -->
+                        <page string="Treatment Plan" name="treatment_plan" invisible="state == 'draft'">
+                            <group>
+                                <p class="text-muted">Treatment details will appear here once the patient is admitted.
+                                </p>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Kanban view (Kept exactly as your original) -->
+    <!-- Kanban view -->
+    <record id="view_hospital_patient_kanban" model="ir.ui.view">
+        <field name="name">hospital.patient.kanban</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <!-- Changed grouping to 'state' to create a pipeline board -->
+            <kanban default_group_by="state" sample="1">
+                <field name="name"/>
+                <field name="ref"/>
+                <field name="age"/>
+                <field name="admission_date"/>
+                <field name="gender"/>
+                <field name="is_admitted"/>
+                <!-- MUST declare the state field here so the Kanban card can read it -->
+                <field name="state"/>
+
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click p-3">
+                            <strong>
+                                <field name="name"/>
+                            </strong>
+
+                            <div t-if="record.ref.raw_value">
+                                Ref:
+                                <field name="ref"/>
+                            </div>
+
+                            <div>
+                                Age:
+                                <field name="age"/>
+                            </div>
+                            <div>
+                                Admission Date:
+                                <field name="admission_date"/>
+                            </div>
+                            <div>
+                                Gender:
+                                <field name="gender"/>
+                            </div>
+
+                            <!-- The New Status Badge -->
+                            <div class="mt-2">
+                                <field name="state"
+                                       widget="badge"
+                                       decoration-success="state == 'discharged'"
+                                       decoration-info="state == 'admitted'"
+                                       decoration-danger="state == 'cancel'"
+                                       decoration-warning="state == 'treatment'"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Search and filter and group by -->
+    <record id="view_hospital_patient_search" model="ir.ui.view">
+        <field name="name">hospital.patient.search</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" filter_domain="['|', ('ref', 'ilike', self), ('name', 'ilike', self)]"/>
+                <field name="age"/>
+                <field name="ref"/>
+                <filter name="filter_male" string="male" domain="[('gender', '=', 'male')]"/>
+                <filter name="filter_female" string="female" domain="[('gender', '=', 'female')]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_hospital_patient" model="ir.actions.act_window">
+        <field name="name">Patients</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hospital.patient</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first patient!
+            </p>
+        </field>
+    </record>
+
+</odoo>

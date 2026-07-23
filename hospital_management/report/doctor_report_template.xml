@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="hospital_doctor_report_template">
+
+        <t t-call="web.html_container">
+
+            <t t-foreach="docs" t-as="doc">
+
+                <t t-call="web.external_layout">
+
+                    <div class="page">
+
+                        <h2 style="text-align:center;">
+                            Hospital Doctor Report
+                        </h2>
+
+                        <br/>
+
+                        <table class="table table-bordered">
+
+                            <tr>
+                                <th>Doctor Name</th>
+                                <td>
+                                    <span t-field="doc.doctor_name"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Employee ID</th>
+                                <td>
+                                    <span t-field="doc.employee_id"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Phone</th>
+                                <td>
+                                    <span t-field="doc.phone"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Email</th>
+                                <td>
+                                    <span t-field="doc.email"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Specialization</th>
+                                <td>
+                                    <span t-field="doc.specialization"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Department</th>
+                                <td>
+                                    <span t-field="doc.department_id"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Experience</th>
+                                <td>
+                                    <span t-field="doc.experience"/>
+                                    Years
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Consultation Fee</th>
+                                <td>
+                                    <span t-field="doc.consultation_fee"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Joining Date</th>
+                                <td>
+                                    <span t-field="doc.joining_date"/>
+                                </td>
+                            </tr>
+
+                        </table>
+
+                    </div>
+
+                </t>
+
+            </t>
+
+        </t>
+
+    </template>
+
+</odoo>

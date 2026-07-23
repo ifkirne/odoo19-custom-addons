@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_hospital_root"
+              name="Hospital"
+              web_icon="hospital_management,static/description/icon.png"
+              sequence="10"/>
+
+    <menuitem id="menu_patient_master"
+              name="Patient Details"
+              parent="menu_hospital_root"
+              sequence="10"/>
+
+    <menuitem id="menu_patient"
+              name="Patients"
+              parent="menu_patient_master"
+              action="action_hospital_patient"
+              sequence="10"/>
+
+    <menuitem id="menu_doctor_master"
+              name="Doctors"
+              parent="menu_hospital_root"
+              sequence="20"/>
+
+    <menuitem id="menu_doctor"
+              name="Doctor Records"
+              parent="menu_doctor_master"
+              action="action_hospital_doctor"
+              sequence="10"/>
+
+    <menuitem id="menu_hospital_appointment_master"
+              name="Appointments"
+              parent="menu_hospital_root"
+              sequence="30"/>
+
+    <menuitem id="menu_hospital_appointment"
+              name="Appointment Details"
+              parent="menu_hospital_appointment_master"
+              action="action_hospital_appointment"
+              sequence="10"/>
+
+    <menuitem id="menu_hospital_department_master"
+              name="Departments"
+              parent="menu_hospital_root"
+              sequence="40"/>
+
+    <menuitem id="menu_hospital_department"
+              name="Department Details"
+              parent="menu_hospital_department_master"
+              action="action_hospital_department"
+              sequence="10"/>
+
+    <menuitem id="menu_patient_discharge_wizard"
+              name="Patient Discharge wizard"
+              parent="menu_hospital_root"
+              action="action_patient_Discharge_Wizard"
+              sequence="50"
+              />
+<!--    <menuitem id="menu_hospital_patient_discharge"-->
+<!--              name="Patient Discharge Wizard Details"-->
+<!--              parent="menu_hospital_discharge_wizard"-->
+<!--              action="action_patient_Discharge_Wizard"-->
+<!--              sequence="60"-->
+<!--              />-->
+
+</odoo>

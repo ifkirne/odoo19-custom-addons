@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="action_doctor_report" model="ir.actions.report">
+        <field name="name">Doctor Report</field>
+        <field name="model">hospital.doctor</field>
+        <field name="report_type">qweb-pdf</field>
+
+        <!-- Template ID -->
+        <field name="report_name">hospital_management.hospital_doctor_report_template</field>
+        <field name="report_file">hospital_management.hospital_doctor_report_template</field>
+
+        <!-- Show report in Print menu -->
+        <field name="binding_model_id" ref="model_hospital_doctor"/>
+        <field name="binding_type">report</field>
+
+        <!-- Downloaded PDF name -->
+        <field name="print_report_name">'Doctor Report - %s' % (object.doctor_name)</field>
+    </record>
+
+</odoo>

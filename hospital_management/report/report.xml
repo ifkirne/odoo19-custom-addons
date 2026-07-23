@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    <odoo> is the root element required in all Odoo XML data files.
+    It tells the system that the contents inside are records to be loaded into the database.
+-->
+<odoo>
+
+    <!--
+        <record>: Creates a new entry in a specific database table.
+        id="action_patient_report": A unique identifier (External ID) for this report. You use this ID when linking buttons to the report.
+        model="ir.actions.report": The core Odoo database table where all report configurations are stored.
+    -->
+    <record id="action_patient_report" model="ir.actions.report">
+
+        <!--
+            name="name": The human-readable name of the report.
+            This is what users see in the Odoo interface (e.g., the text inside the "Print" dropdown menu).
+        -->
+        <field name="name">Patient Report</field>
+
+        <!--
+            name="model": The target database model this report pulls data from.
+            Since this is a patient report, it fetches data from 'hospital.patient'.
+        -->
+        <field name="model">hospital.patient</field>
+
+        <!--
+            name="report_type": Instructs the Odoo rendering engine on the output format.
+            'qweb-pdf' means pass the HTML through wkhtmltopdf to create a downloadable file. (The alternative is 'qweb-html').
+        -->
+        <field name="report_type">qweb-pdf</field>
+
+        <!--
+            name="report_name": The most critical link. It tells Odoo EXACTLY which QWeb template to render.
+            Format MUST be: module_directory_name.template_id (No spaces!).
+        -->
+        <field name="report_name">hospital_management.hospital_patient_report_template</field>
+
+        <!--
+            name="report_file": Acts as a fallback/duplicate of report_name.
+            In modern Odoo, you should always set this to the exact same value as report_name to prevent loading errors.
+        -->
+        <field name="report_file">hospital_management.hospital_patient_report_template</field>
+
+        <!--
+            name="binding_model_id": Connects this report to the UI of a specific model.
+            Using 'ref="model_hospital_patient"' tells Odoo to attach this report action to the patient form/tree views.
+            (Note: 'model_' is a required prefix when referencing models this way).
+        -->
+        <field name="binding_model_id" ref="model_hospital_patient"/>
+
+        <!--
+            name="binding_type": Determines which menu the report appears under in the UI.
+            'report' puts it in the "Print" menu. (If you used 'action', it would go in the ⚙️ Action menu instead).
+        -->
+        <field name="binding_type">report</field>
+
+        <!--
+            name="print_report_name": A Python expression used to generate the default file name when the user downloads the PDF.
+            Because it evaluates Python, a static name must be wrapped in quotes (e.g., 'Patient Report').
+            You can also make it dynamic, like: ('Patient - %s' % (object.name))
+        -->
+        <field name="print_report_name">'Patient Report'</field>
+
+    </record>
+
+</odoo>
+
+
+<!--
+A **Report** is the final output document (like a PDF or invoice) generated from your database records via an `ir.actions.report` configuration.
+
+**QWeb** is Odoo's built-in XML templating engine that serves as the blueprint, using special `t-` directives (like `t-field`) to inject dynamic Python data into HTML.
+
+Together, you design the visual layout using QWeb, and the Report action converts that dynamic HTML template into a finished, downloadable file.-->

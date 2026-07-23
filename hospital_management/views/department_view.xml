@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Department List View -->
+    <record id="view_hospital_department_list" model="ir.ui.view">
+        <field name="name">hospital.department.list</field>
+        <field name="model">hospital.department</field>
+        <field name="arch" type="xml">
+            <!-- TASK 5: Decorations applied to list view -->
+            <list string="Departments" decoration-success="active == True" decoration-muted="active == False">
+                <field name="department_name"/>
+                <field name="department_code"/>
+                <field name="floor_number"/>
+                <field name="contact_number" widget="phone"/>
+                <field name="email" widget="email"/>
+                <field name="establishment_date"/>
+                <!-- TASK 3: Widget applied -->
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+
+    <!-- Department Form View -->
+    <record id="view_hospital_department_form" model="ir.ui.view">
+        <field name="name">hospital.department.form</field>
+        <field name="model">hospital.department</field>
+        <field name="arch" type="xml">
+            <form string="Department">
+                <!-- CRUD Operation Buttons -->
+                <header>
+                    <button name="action_duplicate_department" string="Duplicate" type="object"/>
+                    <button name="action_archive_department" string="Archive Department" type="object"
+                            class="btn-danger" invisible="active == False"/>
+                </header>
+
+                <!-- TASK 1: Sheet Layout -->
+                <sheet>
+                    <!-- TASK 7: Smart Button for Doctors -->
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_department_doctors" type="object" class="oe_stat_button"
+                                icon="fa-user-md">
+                            <field name="doctor_count" widget="statinfo" string="Doctors"/>
+                        </button>
+                    </div>
+
+                    <!-- Practical Challenge: Ribbon Widget -->
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active == True"/>
+
+                    <!-- TASK 1: Professional Title layout -->
+                    <div class="oe_title">
+                        <label for="department_name" class="oe_edit_only" string="Department Name"/>
+                        <h1>
+                            <field name="department_name"/>
+                        </h1>
+                    </div>
+
+                    <!-- Department Information -->
+                    <group>
+                        <group>
+                            <!-- TASK 6: Conditional Attribute - Code is readonly after record is saved -->
+                            <field name="department_code" readonly="id != False"/>
+                            <field name="floor_number"/>
+                            <!-- Active is hidden here because the Ribbon widget handles the UI -->
+                            <field name="active" invisible="1"/>
+                        </group>
+
+                        <group>
+                            <!-- TASK 3: Fixed typo and added widgets -->
+                            <field name="contact_number" widget="phone"/>
+                            <field name="email" widget="email"/>
+                            <field name="establishment_date"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <field name="description"/>
+                    </group>
+
+                    <!-- TASK 2: Notebooks - One Department -> Many Doctors -->
+                    <notebook>
+                        <page string="Assigned Doctors">
+                            <!-- TASK 6: Make the list readonly so users don't accidentally edit doctors here -->
+                            <field name="doctor_ids" readonly="1">
+                                <list>
+                                    <field name="doctor_name"/>
+                                    <field name="specialization"/>
+                                    <field name="phone" widget="phone"/>
+                                    <field name="email" widget="email"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- Department Kanban View -->
+    <record id="view_hospital_department_kanban" model="ir.ui.view">
+        <field name="name">hospital.department.kanban</field>
+        <field name="model">hospital.department</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="department_name"/>
+                <field name="floor_number"/>
+                <field name="active"/>
+
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click p-3">
+                            <strong class="fs-5">
+                                <field name="department_name"/>
+                            </strong>
+
+                            <div class="mt-2">
+                                <div>
+                                    <strong>Floor:</strong>
+                                    <field name="floor_number"/>
+                                </div>
+
+                                <div class="mt-2">
+                                    <t t-if="record.active.raw_value">
+                                        <span class="badge rounded-pill bg-success text-white">Active</span>
+                                    </t>
+                                    <t t-else="">
+                                        <span class="badge rounded-pill bg-danger text-white">Archived</span>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+
+            </kanban>
+        </field>
+    </record>
+
+
+    <!-- Department Search View -->
+    <record id="view_hospital_department_search" model="ir.ui.view">
+        <field name="name">hospital.department.search</field>
+        <field name="model">hospital.department</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="department_name"/>
+                <field name="department_code"/>
+
+                <separator/>
+                <filter name="active" string="Active Departments" domain="[('active','=',True)]"/>
+                <filter name="inactive" string="Archived Departments" domain="[('active','=',False)]"/>
+            </search>
+        </field>
+    </record>
+
+
+    <!-- Department Action -->
+    <record id="action_hospital_department" model="ir.actions.act_window">
+        <field name="name">Departments</field>
+        <field name="res_model">hospital.department</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="view_hospital_department_search"/>
+    </record>
+
+</odoo>

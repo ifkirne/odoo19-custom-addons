@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--    list/tree-->
+    <record id="view_hospital_appointment_list" model="ir.ui.view">
+        <field name="name">hospital.appointment.list</field>
+        <field name="model">hospital.appointment</field>
+        <field name="arch" type="xml">
+
+            <list>
+
+                <field name="patient_id"/>
+                <field name="ref"/>
+                <field name="gender"/>
+                <field name="appointment_time"/>
+                <field name="booking_date"/>
+
+            </list>
+        </field>
+    </record>
+
+
+    <!--    Form-->
+    <record id="view_hospital_appointment_form" model="ir.ui.view">
+        <field name="name">hospital.appointment.form</field>
+        <field name="model">hospital.appointment</field>
+        <field name="arch" type="xml">
+            <form>
+<!--                <header>-->
+<!--                    &lt;!&ndash;                                    <button name="action_update" string="Admit Patient" type="object" class="oe_highlight"/>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                    <button name="action_create_copy" string="Duplicate Patient" type="object"/>&ndash;&gt;-->
+<!--                    <button name="action_delete" string="Delete Appointment" type="object" class="btn-danger"-->
+<!--                            confirm="Are you sure you want to delete this Appointment?"/>-->
+<!--                </header>-->
+
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="patient_id"/>
+                            <field name="ref"/>
+                            <field name="appointment_time"/>
+
+                        </group>
+                        <group>
+                            <field name="gender"/>
+                            <field name="booking_date"/>
+
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_hospital_appointment" model="ir.actions.act_window">
+        <field name="name">Appointment</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hospital.appointment</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Appointment!
+            </p>
+        </field>
+    </record>
+
+
+</odoo>
+
+
+
+

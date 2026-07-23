@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- 1. The Form View -->
+    <record id="patient_discharge_wizard_view_form" model="ir.ui.view">
+        <field name="name">patient.discharge.wizard.form</field>
+        <field name="model">patient.discharge.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Patient Discharge">
+                <group>
+                    <field name="patient_id"/>
+                    <field name="discharge_date"/>
+                    <field name="discharge_note"/>
+                </group>
+                <footer>
+                    <button
+                        name="action_discharge"
+                        string="Confirm Discharge"
+                        type="object"
+                        class="btn-primary"
+                    />
+                    <button
+                        string="Cancel"
+                        special="cancel"
+                    />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- 2. The Window Action (This is what your menu is looking for!) -->
+    <record id="action_patient_Discharge_Wizard" model="ir.actions.act_window">
+        <field name="name">Patient Discharge</field>
+        <field name="res_model">patient.discharge.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field> <!-- 'new' makes it open as a popup -->
+    </record>
+
+</odoo>
