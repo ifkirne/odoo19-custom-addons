@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <!-- 1. Category: The main section heading (e.g., "Hospital") -->
+    <record id="module_category_hospital" model="ir.module.category">
+        <field name="name">Hospital</field>
+        <field name="sequence">5</field>
+    </record>
+
+    <!-- 2. Privilege: The dropdown field label (e.g., "Hospital Role") -->
+    <record id="privilege_hospital_roles" model="res.groups.privilege">
+        <field name="name">Hospital Role</field>
+        <field name="category_id" ref="module_category_hospital"/>
+    </record>
+
+    <!-- 3. Groups: The actual access levels inside the dropdown -->
+
+    <!-- Receptionist -->
+    <record id="group_hospital_receptionist" model="res.groups">
+        <field name="name">Receptionist</field>
+        <field name="privilege_id" ref="privilege_hospital_roles"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- Doctors -->
+    <record id="group_hospital_doctors" model="res.groups">
+        <field name="name">Doctors</field>
+        <field name="privilege_id" ref="privilege_hospital_roles"/>
+        <field name="implied_ids" eval="[(4, ref('hospital_management.group_hospital_receptionist'))]"/>
+    </record>
+
+    <!-- Manager -->
+    <record id="group_hospital_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="privilege_id" ref="privilege_hospital_roles"/>
+        <field name="implied_ids" eval="[(4, ref('hospital_management.group_hospital_doctors'))]"/>
+    </record>
+
+</odoo>
+
+
+<!--<record model="ir.module.category">: Creates a high-level label used to organize related application settings in the backend.-->
+
+<!--<record model="res.groups">: Defines a specific user role (like Receptionist or Manager) that you can assign to employees.-->
+
+<!--implied_ids: Builds a permission hierarchy so that a higher-tier role automatically inherits all the access rights of a lower-tier role.-->
+
+<!--(4, ref('...')): A specific database command telling Odoo to link an existing record (like a parent group) to the current record.-->
+
+<!--base.group_user: The foundational Odoo group that simply grants a user basic rights to log in and view the backend as an internal employee.-->
