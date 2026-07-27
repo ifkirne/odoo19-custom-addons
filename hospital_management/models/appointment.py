@@ -11,12 +11,25 @@ class HospitalAppointment(models.Model):
     patient_id = fields.Many2one(
         'hospital.patient',
         string="Patient")
+    # doctor_id = fields.Many2one('hospital.doctor', string="Doctor")
 
     gender = fields.Selection([('male', 'Male'), ('female', 'Female')], string="Gender")
     appointment_time = fields.Datetime(string='Appointment Time', default=fields.Datetime.now)
     # Changed default to fields.Date.context_today since it's a Date field, not Datetime
     booking_date = fields.Date(string='Booking Date', default=fields.Date.context_today)
     ref = fields.Integer(string="Reference")
+    active = fields.Boolean(string="Active", default=True)
+
+    state = fields.Selection(
+        [
+            ('draft', 'Draft'),
+            ('confirmed', 'Confirmed'),
+            ('done', 'Done'),
+            ('cancel', 'Cancelled'),
+        ],
+        string="Status",
+        default='draft'
+    )
 
     @api.onchange('patient_id')
     def onchange_patient_id(self):

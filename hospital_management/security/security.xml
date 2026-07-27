@@ -1,42 +1,100 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
 
-    <!-- 1. Category: The main section heading (e.g., "Hospital") -->
+    <!-- ========================================================= -->
+    <!-- 1. MODULE CATEGORY                                        -->
+    <!-- Concept: Creates the main overarching label in the Odoo   -->
+    <!-- Settings/Users menu to group related access rights.       -->
+    <!-- ========================================================= -->
     <record id="module_category_hospital" model="ir.module.category">
         <field name="name">Hospital</field>
+        <!-- 'sequence' determines the display order in the UI -->
         <field name="sequence">5</field>
     </record>
 
-    <!-- 2. Privilege: The dropdown field label (e.g., "Hospital Role") -->
+    <!-- ========================================================= -->
+    <!-- 2. PRIVILEGE (Custom Grouping)                            -->
+    <!-- Concept: Usually, Odoo uses 'ir.module.category' for      -->
+    <!-- dropdowns. Using 'res.groups.privilege' implies a custom  -->
+    <!-- setup to group these specific roles into a single         -->
+    <!-- selection field on the user profile.                      -->
+    <!-- ========================================================= -->
     <record id="privilege_hospital_roles" model="res.groups.privilege">
         <field name="name">Hospital Role</field>
+        <!-- Links this dropdown field back to the main category -->
         <field name="category_id" ref="module_category_hospital"/>
     </record>
 
-    <!-- 3. Groups: The actual access levels inside the dropdown -->
+    <!-- ========================================================= -->
+    <!-- 3. ACCESS GROUPS (User Roles)                             -->
+    <!-- Concept: Defines specific roles. You assign these groups  -->
+    <!-- to users, granting them menu and model access rights      -->
+    <!-- defined in your 'ir.model.access.csv' file.               -->
+    <!-- ========================================================= -->
 
-    <!-- Receptionist -->
+    <!-- Role: Receptionist (Base Level) -->
     <record id="group_hospital_receptionist" model="res.groups">
         <field name="name">Receptionist</field>
         <field name="privilege_id" ref="privilege_hospital_roles"/>
+        <!-- 'implied_ids' grants inheritance. -->
+        <!-- (4, ID) means: Add the standard Internal User (base.group_user) -->
+        <!-- rights to this Receptionist group. -->
         <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
     </record>
 
-    <!-- Doctors -->
+    <!-- Role: Doctors (Middle Level) -->
     <record id="group_hospital_doctors" model="res.groups">
         <field name="name">Doctors</field>
         <field name="privilege_id" ref="privilege_hospital_roles"/>
+        <!-- Inheritance: Doctors automatically get all Receptionist rights -->
         <field name="implied_ids" eval="[(4, ref('hospital_management.group_hospital_receptionist'))]"/>
     </record>
 
-    <!-- Manager -->
+    <!-- Role: Manager (Top Level) -->
     <record id="group_hospital_manager" model="res.groups">
         <field name="name">Manager</field>
         <field name="privilege_id" ref="privilege_hospital_roles"/>
+        <!-- Inheritance: Managers automatically get all Doctor rights -->
         <field name="implied_ids" eval="[(4, ref('hospital_management.group_hospital_doctors'))]"/>
     </record>
 
+    <!-- ========================================================= -->
+    <!-- 4. RECORD RULES (Row-Level Security)                      -->
+    <!-- Concept: Determines WHICH SPECIFIC RECORDS a user can     -->
+    <!-- see or modify, acting as a filter on the database table.  -->
+    <!-- ========================================================= -->
+
+    <!-- Rule 1: Receptionists only see appointments they created -->
+    <record id="receptionsit_own_appointment_rule" model="ir.rule">
+        <field name="name">Receptionist: view own records</field>
+        <!-- Links the rule to the hospital.appointment database table -->
+        <field name="model_id" ref="model_hospital_appointment"/>
+        <!-- 'global' = False means this rule only applies to specific groups -->
+        <field name="global" eval="False"/>
+        <!-- Links this rule explicitly to the Receptionist group -->
+        <field name="groups" eval="[(4, ref('hospital_management.group_hospital_receptionist'))]"/>
+        <!-- 'domain_force' acts as a WHERE clause in SQL. -->
+        <!-- Here, it checks if the record's creator ID matches the logged-in user's ID -->
+        <field name="domain_force">[('create_uid','=',user.id)]</field>
+    </record>
+
+    <!-- Rule 2: Doctors see ALL appointments -->
+    <record id="doctor_view_all_appointment" model="ir.rule">
+        <field name="name">Doctor view all records</field>
+        <field name="model_id" ref="model_hospital_appointment"/>
+        <field name="global" eval="False"/>
+        <!-- Links this rule to the Doctors group -->
+        <field name="groups" eval="[(4, ref('hospital_management.group_hospital_doctors'))]"/>
+        <!-- An empty domain [] means NO FILTER. -->
+        <!-- Since Doctors inherit from Receptionists, they would normally be restricted -->
+        <!-- by the Receptionist rule. This empty domain overrides it, granting full visibility. -->
+        <field name="domain_force">[]</field>
+    </record>
+
 </odoo>
+
+
+
 
 
 <!--<record model="ir.module.category">: Creates a high-level label used to organize related application settings in the backend.-->
