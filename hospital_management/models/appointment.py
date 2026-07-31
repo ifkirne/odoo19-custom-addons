@@ -12,7 +12,7 @@ class HospitalAppointment(models.Model):
     patient_id = fields.Many2one(
         'hospital.patient',
         string="Patient")
-    # doctor_id = fields.Many2one('hospital.doctor', string="Doctor")
+    doctor_id = fields.Many2one('hospital.doctor', string="Doctor")
 
     gender = fields.Selection([('male', 'Male'), ('female', 'Female')], string="Gender")
     appointment_time = fields.Datetime(string='Appointment Time', default=fields.Datetime.now)

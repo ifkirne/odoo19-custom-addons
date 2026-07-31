@@ -24,15 +24,19 @@
                                 <div class="card h-100 shadow-sm">
                                     <div class="card-body">
                                         <h4 class="card-title text-primary">
-                                            Dr. <t t-esc="doctor.doctor_name"/>
+                                            Dr.
+                                            <t t-esc="doctor.doctor_name"/>
                                         </h4>
                                         <h6 class="card-subtitle mb-2 text-muted text-capitalize">
                                             <t t-esc="doctor.specialization"/>
                                         </h6>
                                         <hr/>
                                         <p class="card-text">
-                                            <strong>Phone:</strong> <t t-esc="doctor.phone"/><br/>
-                                            <strong>Email:</strong> <t t-esc="doctor.email"/>
+                                            <strong>Phone:</strong>
+                                            <t t-esc="doctor.phone"/>
+                                            <br/>
+                                            <strong>Email:</strong>
+                                            <t t-esc="doctor.email"/>
                                         </p>
                                     </div>
                                 </div>
@@ -40,6 +44,102 @@
                         </t>
                     </div>
 
+                </div>
+            </div>
+        </t>
+    </template>
+
+
+    <!-- Create Website Menu for Appointments -->
+    <record id="menu_hospital_appointment_website" model="website.menu">
+        <field name="name">Appointment</field>
+        <field name="url">/hospital/appointment</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence">60</field>
+    </record>
+
+
+    <!-- Task 1 & 2: The Appointment Form Template -->
+    <template id="appointment_form_template" name="Book Appointment">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                <div class="container mt-5 mb-5">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <h2 class="text-center mb-4">Book an Appointment</h2>
+
+                            <form action="/hospital/appointment/submit" method="post" class="card shadow-sm p-4">
+                                <!-- SECURITY REQUIREMENT: CSRF Token -->
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                                <div class="form-group mb-3">
+                                    <label for="patient_name" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" name="patient_name" required="1"/>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6 form-group">
+                                        <label for="email" class="form-label">Email Address</label>
+                                        <input type="email" class="form-control" name="email" required="1"/>
+                                    </div>
+                                    <div class="col-md-6 form-group">
+                                        <label for="phone" class="form-label">Phone Number</label>
+                                        <input type="tel" class="form-control" name="phone" required="1"/>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-4">
+                                    <div class="col-md-6 form-group">
+                                        <label for="appointment_date" class="form-label">Preferred Date</label>
+                                        <input type="date" class="form-control" name="appointment_date" required="1"/>
+                                    </div>
+                                    <div class="col-md-6 form-group">
+                                        <label for="doctor_id" class="form-label">Select Doctor</label>
+                                        <select class="form-select" name="doctor_id" required="1">
+                                            <option value="">-- Choose a Doctor --</option>
+                                            <!-- Dynamically load doctors from the database -->
+                                            <t t-foreach="doctors" t-as="doc">
+                                                <option t-att-value="doc.id">
+                                                    Dr.
+                                                    <t t-esc="doc.doctor_name"/>
+                                                    -
+                                                    <t t-esc="doc.specialization"/>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary btn-lg w-100">Submit Request</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Task 7: The Success Page Template -->
+    <template id="appointment_success_template" name="Appointment Success">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                <div class="container text-center mt-5 mb-5">
+                    <div class="card shadow-sm p-5 border-success">
+                        <h1 class="text-success display-4 mb-3">
+                            <i class="fa fa-check-circle"/>
+                        </h1>
+                        <h2>Appointment Submitted Successfully!</h2>
+                        <p class="lead mt-3">
+                            Thank you for reaching out. Our hospital staff will review your request and contact you
+                            shortly to confirm your booking.
+                        </p>
+                        <div class="mt-4">
+                            <a href="/" class="btn btn-outline-primary">Return to Homepage</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </t>

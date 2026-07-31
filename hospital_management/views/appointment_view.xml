@@ -58,7 +58,7 @@
                         <group>
                             <field name="patient_id"/>
                             <!-- 2. The Doctor Field: Now you can assign a doctor! -->
-                            <!-- <field name="doctor_id"/> -->
+                             <field name="doctor_id"/>
                             <field name="ref"/>
                             <field name="appointment_time"/>
                         </group>
