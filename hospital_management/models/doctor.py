@@ -10,7 +10,7 @@ class HospitalDoctor(models.Model):
     _order = "doctor_name asc"
 
     # ADDED FOR DAY 16: Inherit mail modules to enable Chatter and email logging
-    _inherit = ['mail.thread', 'mail.activity.mixin']
+    # _inherit = ['mail.thread', 'mail.activity.mixin']
 
     # ---------------------------------------------------------
     # Basic Information
@@ -120,12 +120,12 @@ class HospitalDoctor(models.Model):
                 'email_from': self.env.user.company_id.email or 'admin@nerithonx.com',
             }
 
-            # 3. Send the email using the mail framework
-            mail = self.env['mail.mail'].sudo().create(mail_values)
-            mail.send()
-
-            # 4. Log the execution in the Chatter
-            doctor.message_post(
-                body="System Automated Action: Weekly schedule reminder email sent successfully.",
-                subtype_xmlid="mail.mt_note"
-            )
+            # # 3. Send the email using the mail framework
+            # mail = self.env['mail.mail'].sudo().create(mail_values)
+            # mail.send()
+            #
+            # # 4. Log the execution in the Chatter
+            # doctor.message_post(
+            #     body="System Automated Action: Weekly schedule reminder email sent successfully.",
+            #     subtype_xmlid="mail.mt_note"
+            # )

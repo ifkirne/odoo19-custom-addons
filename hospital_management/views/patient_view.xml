@@ -61,6 +61,11 @@
                             type="action"
                             class="oe_highlight"
                             context="{'default_patient_id': id}"/>
+<!--                    Add follow-up button-->
+                    <button name="action_schedule_followup"
+                            string="Schedule Follow-up"
+                            type="object"
+                            class="oe_highlight"/>
 
                     <!-- 4. The Clickable Statusbar -->
                     <!-- options="{'clickable': '1'}" allows the user to click stages directly -->
@@ -131,6 +136,13 @@
                         </page>
                     </notebook>
                 </sheet>
+                <!-- Chatter: Chatter is an internal communication panel attached to a record. It stores messages,
+                field changes, notes, attachments, and activities so employees can collaborate without leaving Odoo. -->
+                <chatter class="oe_chatter">
+                    <field name="message_follower_ids" group="base.group.user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </chatter>
             </form>
         </field>
     </record>

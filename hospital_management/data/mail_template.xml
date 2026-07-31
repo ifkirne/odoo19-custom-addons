@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="email_template_appointment_registration" model="mail.template">
+        <field name="name">Appointment Registration Email</field>
+        <field name="model_id" ref="model_hospital_appointment"/>
+
+        <!-- {{ }} is perfectly fine here -->
+        <field name="subject">Appointment Confirmation - {{ object.patient_id.name or 'Patient' }}</field>
+        <field name="email_to">{{ object.patient_id.email }}</field>
+        <field name="email_from">ilyasrahman.engineer@gmail.com</field>
+
+        <!-- You MUST use <t t-out="..."/> inside the body_html -->
+        <field name="body_html" type="html">
+            <div>
+                <p>Dear <t t-out="object.patient_id.name"/>,</p>
+                <p>Thank you for registering your appointment with our hospital.</p>
+
+                <p><b>Reference Number:</b> <t t-out="object.ref"/></p>
+                <p><b>Appointment Time:</b> <t t-out="object.appointment_time"/></p>
+                <p><b>Booking Date:</b> <t t-out="object.booking_date"/></p>
+
+                <p>Regards,<br/>ABC Hospital Team</p>
+            </div>
+        </field>
+    </record>
+</odoo>

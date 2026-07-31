@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
+from odoo.exceptions import UserError
 
 
 class HospitalAppointment(models.Model):
@@ -30,6 +31,27 @@ class HospitalAppointment(models.Model):
         string="Status",
         default='draft'
     )
+
+    #Sends registration confirmation email using an email template
+    def action_send_registration_email(self):
+        template = self.env.ref('hospital_management.email_template_appointment_registration', raise_if_not_found=False)
+
+        if not template:
+            raise UserError("Email template 'email_template_appointment_registration' not found.")
+
+        for rec in self:
+            if not rec.patient_id:
+                raise UserError("Please select a patient first.")
+            if not rec.patient_id.email:
+                raise UserError(f"Patient '{rec.patient_id.name}' has no email configured.")
+
+            # FIXED: We are now forcing the 'email_to' value directly via Python
+            template.send_mail(
+                rec.id,
+                force_send=True,
+                email_values={'email_to': rec.patient_id.email}
+            )
+
 
     @api.onchange('patient_id')
     def onchange_patient_id(self):

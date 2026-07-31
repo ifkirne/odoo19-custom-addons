@@ -24,7 +24,7 @@ Features:
     ],
 
     'data': [
-         'security/security.xml',
+        'security/security.xml',
         'security/ir.model.access.csv',
 
         # Reports
@@ -41,6 +41,8 @@ Features:
 
         # Cron job
         'data/cron.xml',
+        #Email
+        'data/mail_template.xml',
 
         # Wizard
         'wizard/patient_discharge_wizard_views.xml',
