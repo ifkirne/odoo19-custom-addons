@@ -21,6 +21,7 @@ Features:
     'depends': [
         'base',
         'mail',  # This MUST be here
+        'website',
     ],
 
     'data': [
@@ -43,6 +44,8 @@ Features:
         'data/cron.xml',
         #Email
         'data/mail_template.xml',
+        # website
+        'views/website_templates.xml', # Add this line
 
         # Wizard
         'wizard/patient_discharge_wizard_views.xml',

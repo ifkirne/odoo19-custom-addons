@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Task 8: Create Website Menu -->
+    <record id="menu_hospital_doctors_website" model="website.menu">
+        <field name="name">Doctors</field>
+        <field name="url">/hospital/doctors</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <!-- FIX: Removed type="int", Odoo handles the type automatically here -->
+        <field name="sequence">50</field>
+    </record>
+
+    <!-- Task 6 & 7: Create QWeb Template and Display Doctors -->
+    <template id="doctor_list_template" name="Our Doctors">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                <div class="container mt-5 mb-5">
+                    <h2 class="text-center mb-4">Our Medical Specialists</h2>
+
+                    <div class="row">
+                        <!-- QWeb Loop -->
+                        <t t-foreach="doctors" t-as="doctor">
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100 shadow-sm">
+                                    <div class="card-body">
+                                        <h4 class="card-title text-primary">
+                                            Dr. <t t-esc="doctor.doctor_name"/>
+                                        </h4>
+                                        <h6 class="card-subtitle mb-2 text-muted text-capitalize">
+                                            <t t-esc="doctor.specialization"/>
+                                        </h6>
+                                        <hr/>
+                                        <p class="card-text">
+                                            <strong>Phone:</strong> <t t-esc="doctor.phone"/><br/>
+                                            <strong>Email:</strong> <t t-esc="doctor.email"/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>
