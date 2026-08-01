@@ -66,3 +66,28 @@ class HospitalWebsite(http.Controller):
     @http.route('/hospital/appointment/success', type='http', auth='public', website=True)
     def appointment_success(self, **kwargs):
         return request.render('hospital_management.appointment_success_template')
+
+
+    # ---------------------------------------------------
+    # Day24: Portal Integration: My Appointments Portal
+    # ---------------------------------------------------
+    # Task 2: Create Portal Route
+    @http.route(['/my/appointments'], type='http', auth='user', website=True)
+    def my_appointments(self, **kw):
+        # Identify the logged-in user's partner record
+        current_partner = request.env.user.partner_id
+
+        # Task 8: Secure Portal Access (Filtering)
+        # Assuming patient_id has a many2one relationship to res.partner named partner_id
+        domain = [('patient_id.partner_id', '=', current_partner.id)]
+
+        # Task 3: Fetch Appointment Records
+        # .sudo() allows read access, but the strict domain ensures they only get their own data
+        appointments = request.env['hospital.appointment'].sudo().search(domain)
+
+        values = {
+            'appointments': appointments,
+            'page_name': 'appointment',  # Highlights the correct menu item
+        }
+
+        return request.render('hospital_management.portal_my_appointments', values)

@@ -6,17 +6,27 @@ from odoo.exceptions import UserError
 class HospitalAppointment(models.Model):
     _name = 'hospital.appointment'
     _description = 'Hospital Appointments'
-    _rec_name = 'patient_id'
 
-    # Added the required relation model (assuming 'hospital.patient')
+    # Tells Odoo to use the 'name' field to represent the record
+    _rec_name = 'name'
+
+    # =========================================================
+    # MISSING FIELDS REQUIRED BY THE PORTAL TEMPLATE
+    # =========================================================
+    name = fields.Char(string='Appointment Number', required=True, copy=False, readonly=True, default='New')
+    appointment_date = fields.Date(string='Appointment Date', required=True, default=fields.Date.context_today)
+    notes = fields.Text(string='Appointment Notes')
+    # =========================================================
+
     patient_id = fields.Many2one(
         'hospital.patient',
-        string="Patient")
+        string="Patient",
+        required=True  # Good practice to make this required
+    )
     doctor_id = fields.Many2one('hospital.doctor', string="Doctor")
 
     gender = fields.Selection([('male', 'Male'), ('female', 'Female')], string="Gender")
     appointment_time = fields.Datetime(string='Appointment Time', default=fields.Datetime.now)
-    # Changed default to fields.Date.context_today since it's a Date field, not Datetime
     booking_date = fields.Date(string='Booking Date', default=fields.Date.context_today)
     ref = fields.Integer(string="Reference")
     active = fields.Boolean(string="Active", default=True)
@@ -32,7 +42,7 @@ class HospitalAppointment(models.Model):
         default='draft'
     )
 
-    #Sends registration confirmation email using an email template
+    # Sends registration confirmation email using an email template
     def action_send_registration_email(self):
         template = self.env.ref('hospital_management.email_template_appointment_registration', raise_if_not_found=False)
 
@@ -52,7 +62,6 @@ class HospitalAppointment(models.Model):
                 email_values={'email_to': rec.patient_id.email}
             )
 
-
     @api.onchange('patient_id')
     def onchange_patient_id(self):
         # We loop through self to ensure safety, a standard Odoo best practice!
@@ -61,9 +70,9 @@ class HospitalAppointment(models.Model):
                 rec.ref = rec.patient_id.ref
                 rec.gender = rec.patient_id.gender
             else:
-                # Clear the fields if the user removes the selected patient
-                rec.ref = ''
-                rec.gender = ''
+                # FIXED: Use False instead of '' to clear fields safely in Odoo
+                rec.ref = False
+                rec.gender = False
 
     #     CRUD OPERATION #####################################
 

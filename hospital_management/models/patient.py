@@ -57,6 +57,13 @@ class HospitalPatient(models.Model):
         default="0",
     )
 
+    # Add this field to link the patient to the portal user
+    partner_id = fields.Many2one(
+        "res.partner",
+        string="Linked Contact",
+        help="Links this patient to an Odoo Contact for Portal access."
+    )
+
     # Relational field linking the patient to a specific doctor
     doctor_id = fields.Many2one(
         "hospital.doctor", string="Assigned Doctor", ondelete="restrict", tracking=True
@@ -150,22 +157,6 @@ class HospitalPatient(models.Model):
             "target": "current",
         }
 
-    # Sends registration confirmation email using an email template
-
-    # def action_send_registration_email(self):
-    #     self.ensure_one()
-    #
-    #     if not self.email:
-    #         raise UserError("Please set the patient email first.")
-    #
-    #     template = self.env.ref(
-    #         'hospital_management.email_template_patient_registration'
-    #     )
-    #
-    #     template.send_mail(self.id, force_send=True)
-    #
-    #     return True
-
     # =========================================================
     # ADDED FOR DAY 16: TASK 3 & 5 - PATIENT STATUS UPDATE CRON
     # =========================================================
@@ -198,15 +189,12 @@ class HospitalPatient(models.Model):
                 subtype_xmlid="mail.mt_note",  # Internal note
             )
 
-
-
-            # Create Activity
-
+    # Create Activity
     def action_schedule_followup(self):
-            for rec in self:
-                rec.activity_schedule(
-                    'mail.mail_activity_data_todo',
-                    summary='Patient Follow-up Required',
-                    date_deadline=fields.Date.context_today(rec),
-                    user_id=self.env.user.id
-                )
+        for rec in self:
+            rec.activity_schedule(
+                'mail.mail_activity_data_todo',
+                summary='Patient Follow-up Required',
+                date_deadline=fields.Date.context_today(rec),
+                user_id=self.env.user.id
+            )

@@ -22,6 +22,7 @@ Features:
         'base',
         'mail',  # This MUST be here
         'website',
+        'portal',
     ],
 
     'data': [
@@ -49,7 +50,8 @@ Features:
 
         # Wizard
         'wizard/patient_discharge_wizard_views.xml',
-
+        # Portal
+        'views/portal_templates.xml',
         # Menus
         'views/menu.xml',
     ],
