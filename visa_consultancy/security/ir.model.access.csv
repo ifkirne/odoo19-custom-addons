@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id,perm_read,perm_write,perm_create,perm_unlink
+access_visa_country,visa.country,model_visa_country,,1,1,1,1
+access_visa_type,visa.type,model_visa_type,,1,1,1,1
+access_visa_applicant,visa.applicant,model_visa_applicant,,1,1,1,1

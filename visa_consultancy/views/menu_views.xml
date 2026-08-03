@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- 1. ACTIONS MUST GO FIRST -->
+    <record id="action_visa_country" model="ir.actions.act_window">
+        <field name="name">Countries</field>
+        <field name="res_model">visa.country</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_visa_type" model="ir.actions.act_window">
+        <field name="name">Visa Types</field>
+        <field name="res_model">visa.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_visa_applicant" model="ir.actions.act_window">
+        <field name="name">Applicants</field>
+        <field name="res_model">visa.applicant</field>
+        <field name="view_mode">list,form,graph</field>
+    </record>
+
+    <!-- 2. MENUS CAN GO SECOND (Now they can find the actions above) -->
+    <!-- Root Menu -->
+    <menuitem id="menu_visa_root" name="Visa Consultancy"/>
+
+    <!-- Configuration -->
+    <menuitem id="menu_visa_configuration" name="Configuration" parent="menu_visa_root"/>
+
+    <!-- Countries -->
+    <menuitem id="menu_visa_country" name="Countries" parent="menu_visa_configuration" action="action_visa_country"/>
+
+    <!-- Visa Types -->
+    <menuitem id="menu_visa_type" name="Visa Types" action="action_visa_type" parent="menu_visa_configuration"/>
+
+    <!-- Applicants -->
+    <menuitem id="menu_visa_applicant" name="Applicants" action="action_visa_applicant" parent="menu_visa_root"/>
+</odoo>
