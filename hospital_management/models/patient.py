@@ -198,3 +198,4 @@ class HospitalPatient(models.Model):
                 date_deadline=fields.Date.context_today(rec),
                 user_id=self.env.user.id
             )
+

@@ -42,7 +42,7 @@
                         <th>Appointment Number</th>
                         <th>Patient Name</th>
                         <th>Doctor</th>
-                        <th>Appointment Date</th>
+                        <th>Appointment DateTime</th>
                         <th>Doctor Contact Info</th> <!-- Task 7 -->
                         <th>Notes</th>               <!-- Task 7 -->
                         <th>Status</th>
@@ -54,7 +54,7 @@
                             <td><span t-field="appointment.name"/></td>
                             <td><span t-field="appointment.patient_id.name"/></td>
                             <td><span t-field="appointment.doctor_id.doctor_name"/></td>
-                            <td><span t-field="appointment.appointment_date"/></td>
+                            <td><span t-field="appointment.appointment_time"/></td>
 
                             <!-- Task 7: Display Appointment Details -->
                             <td>

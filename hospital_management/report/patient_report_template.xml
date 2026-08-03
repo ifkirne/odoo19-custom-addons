@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-
     <template id="hospital_patient_report_template">
-
         <t t-call="web.html_container">
-
             <t t-foreach="docs" t-as="doc">
-
                 <t t-call="web.external_layout">
-
                     <div class="page">
-
                         <h2>Hospital Patient Report</h2>
 
                         <p>
@@ -20,20 +14,18 @@
 
                         <p>
                             <strong>Phone:</strong>
-                            <span t-field="doc.phone"></span>
+                            <span t-field="doc.phone"/>
                         </p>
 
                         <p>
                             <strong>Email:</strong>
-                            <span t-field="doc.email"></span>
+                            <span t-field="doc.email"/>
                         </p>
-
 
                         <p>
                             <strong>Gender:</strong>
-                            <span t-field="doc.gender"></span>
+                            <span t-field="doc.gender"/>
                         </p>
-
 
                         <p>
                             <strong>Age:</strong>
@@ -42,17 +34,13 @@
 
                         <p>
                             <strong>Admission Date:</strong>
-                            <span t-field="doc.admission_date"></span>
+                            <span t-field="doc.admission_date"/>
                         </p>
-
                     </div>
 
+
                 </t>
-
             </t>
-
         </t>
-
     </template>
-
 </odoo>

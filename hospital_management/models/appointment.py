@@ -42,6 +42,9 @@ class HospitalAppointment(models.Model):
         default='draft'
     )
 
+
+
+
     # Sends registration confirmation email using an email template
     def action_send_registration_email(self):
         template = self.env.ref('hospital_management.email_template_appointment_registration', raise_if_not_found=False)

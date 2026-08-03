@@ -23,6 +23,7 @@ Features:
         'mail',  # This MUST be here
         'website',
         'portal',
+         'sale',
     ],
 
     'data': [
