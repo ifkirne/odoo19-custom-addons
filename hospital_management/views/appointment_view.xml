@@ -17,49 +17,45 @@
         </field>
     </record>
 
-<!--    &lt;!&ndash; Search View (UNCOMMENTED) &ndash;&gt;-->
-<!--    <record id="view_hospital_appointment_search" model="ir.ui.view">-->
-<!--        <field name="name">hospital.appointment.search</field>-->
-<!--        <field name="model">hospital.appointment</field>-->
-<!--        <field name="arch" type="xml">-->
-<!--            <search string="Appointments Search">-->
-<!--                <field name="patient_id"/>-->
-<!--                <filter string="Male" name="filter_male" domain="[('gender', '=', 'male')]"/>-->
-<!--                <filter string="Female" name="filter_female" domain="[('gender', '=', 'female')]"/>-->
-
-<!--                <group string="Group By">-->
-<!--                    <filter string="Patient" name="group_by_patient" context="{'group_by': 'patient_id'}"/>-->
-<!--                    <filter string="Gender" name="group_by_gender" context="{'group_by': 'gender'}"/>-->
-<!--                </group>-->
-<!--            </search>-->
-<!--        </field>-->
-<!--    </record>-->
-
     <!-- Form View -->
     <record id="view_hospital_appointment_form" model="ir.ui.view">
         <field name="name">hospital.appointment.form</field>
         <field name="model">hospital.appointment</field>
         <field name="arch" type="xml">
             <form>
-                <!-- 1. The Header: Adds the pipeline status bar at the top -->
+                <!-- 1. Header Area: Action buttons & Statusbar -->
                 <header>
-                       <button
-                            name="action_send_registration_email"
+                    <button name="action_send_registration_email"
                             type="object"
                             string="Send Email"
                             class="btn-primary"/>
-
-                    <!-- widget="statusbar" makes it look like standard Odoo pipelines -->
-                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
-
+                    <button name="action_view_sale_order"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-usd"
+                            invisible="not sale_order_id">
+                        <field name="sale_order_id" widget="statinfo" string="Quotation"/>
+                    </button>
                 </header>
+
+                <!-- 2. Sheet Area: Stat Box & Record Fields -->
                 <sheet>
+                    <!-- Stat Button Box inside Sheet -->
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_sale_order"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-usd">
+                            <field name="sale_order_id" widget="statinfo" string="Quotation"/>
+                        </button>
+                    </div>
+
                     <group>
                         <group>
                             <field name="patient_id"/>
-                            <!-- 2. The Doctor Field: Now you can assign a doctor! -->
-                             <field name="doctor_id"/>
+                            <field name="doctor_id"/>
                             <field name="product_id"/>
+                            <field name="partner_id"/>
                             <field name="ref"/>
                             <field name="appointment_time"/>
                         </group>
@@ -73,44 +69,34 @@
         </field>
     </record>
 
-    <!-- ============================================== -->
-    <!-- Graph View                                     -->
-    <!-- ============================================== -->
+    <!-- Graph View -->
     <record id="appointment_graph" model="ir.ui.view">
         <field name="name">hospital.appointment.graph</field>
         <field name="model">hospital.appointment</field>
         <field name="arch" type="xml">
-            <!-- type can be: "bar", "pie", or "line" -->
             <graph string="Appointment Graph" type="line">
                 <field name="patient_id"/>
             </graph>
         </field>
     </record>
 
-    <!-- ============================================== -->
-    <!-- Pivot View                                     -->
-    <!-- ============================================== -->
+    <!-- Pivot View -->
     <record id="appointment_pivot" model="ir.ui.view">
         <field name="name">hospital.appointment.pivot</field>
         <field name="model">hospital.appointment</field>
         <field name="arch" type="xml">
             <pivot string="Appointment Pivot">
-                <!-- type="col" puts this on the horizontal axis. -->
                 <field name="appointment_time" type="col" interval="day"/>
             </pivot>
         </field>
     </record>
 
-  <!-- Window Action -->
+    <!-- Window Action -->
     <record id="action_hospital_appointment" model="ir.actions.act_window">
         <field name="name">Appointment</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">hospital.appointment</field>
         <field name="view_mode">list,form,graph,pivot</field>
-
-        <!-- FIX: Comment out or remove this line if the search view above is commented out! -->
-        <!-- <field name="search_view_id" ref="view_hospital_appointment_search"/> -->
-
         <field name="context">{}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -118,4 +104,5 @@
             </p>
         </field>
     </record>
+
 </odoo>
